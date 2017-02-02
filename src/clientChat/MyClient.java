@@ -22,7 +22,13 @@ public class MyClient {
 			sender.start();
 			listener.start();
 			while (true) {
-				sender.addToQueue(scanner.nextLine());
+				String message = scanner.nextLine();
+				if (message == "exit" || message == "quit"){
+					sender.addToQueue("client disconnecting");
+					break;
+				}else{
+					sender.addToQueue(message);
+				}
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

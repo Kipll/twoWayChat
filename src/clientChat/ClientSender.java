@@ -26,9 +26,11 @@ public class ClientSender extends Thread {
 			while (true) {
 				out.writeUTF(queue.take());
 			}
-		} catch (IOException | InterruptedException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
 	}
 

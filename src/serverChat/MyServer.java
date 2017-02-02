@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.net.*;
 import java.util.Scanner;
 
-
 public class MyServer {
 
 	public static void main(String[] args) {
@@ -16,17 +15,17 @@ public class MyServer {
 		try {
 			ServerSocket serverSocket = new ServerSocket(portNumber);
 			String name = getName();
-			
+
 			System.out.println("To connect to this server use this name : " + name);
 			System.out.println("Waiting for connection...");
-			Socket clientSocket = serverSocket.accept();
-
-			ServerSender sender = new ServerSender(new DataOutputStream(clientSocket.getOutputStream()), name);
-			ServerListener listener = new ServerListener(new DataInputStream(clientSocket.getInputStream()));
-			sender.start();
-			listener.start();
 			while (true) {
-				sender.addToQueue(scanner.nextLine());
+				Socket clientSocket = serverSocket.accept();
+
+				ServerSender sender = new ServerSender(new DataOutputStream(clientSocket.getOutputStream()), name);
+				ServerListener listener = new ServerListener(new DataInputStream(clientSocket.getInputStream()));
+				sender.start();
+				listener.start();
+
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
