@@ -6,6 +6,7 @@ import oneToOneConnection.*;
 
 public class Main {
 
+	private static Scanner scanner = new Scanner(System.in);
 	public static void main(String[] args) {
 		Scanner scanner = new Scanner(System.in);
 		System.out.println("would you like to 'host' or 'connect' to a game? :");
@@ -24,14 +25,10 @@ public class Main {
 			if (success) {
 
 				while (true) {
-					byte[] input = new byte[4];
-					for(int i = 0; i < 4; i++) {
-						String s = scanner.nextLine();
-						byte b = Byte.valueOf(s, 2);
-						input[i] = b;
-					}
-					client.addToQueue(input);
+					client.addToQueue(message());	
 				}
+					
+
 
 			}
 		} else if (command.equals("host")) {
@@ -40,14 +37,20 @@ public class Main {
 			int port = Integer.parseInt(scanner.nextLine());
 			server.listen(port);
 			while (true) {
-				byte[] input = new byte[4];
-				for(int i = 0; i < 4; i++) {
-					String s = scanner.nextLine();
-					byte b = Byte.valueOf(s, 2);
-					input[i] = b;
-				}
-				server.addToQueue(input);
+				
+				server.addToQueue(message());
 			}
 		}
+	}
+	
+	private static byte[] message(){
+		byte[] input = new byte[4];
+		for (int i = 0; i < 4; i++) {
+			String s = scanner.nextLine();
+			byte b = Byte.valueOf(s, 2);
+			input[i] = b;
+		}
+		return input;
+		
 	}
 }
