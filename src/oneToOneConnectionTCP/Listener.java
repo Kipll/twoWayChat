@@ -1,4 +1,4 @@
-package oneToOneConnection;
+package oneToOneConnectionTCP;
 
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -17,7 +17,7 @@ public class Listener extends Thread {
 				System.out.println(in.read());
 			}
 		} catch (IOException e) {
-			System.out.println("Connection was lost");
+			System.out.println(e + " : Connection was lost");
 
 		}
 	}

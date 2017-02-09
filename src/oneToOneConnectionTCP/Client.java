@@ -1,4 +1,4 @@
-package oneToOneConnection;
+package oneToOneConnectionTCP;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -7,7 +7,7 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-import oneToOneConnection.*;
+import oneToOneConnectionTCP.*;
 
 public class Client {
 
@@ -25,7 +25,7 @@ public class Client {
 		try {
 
 			Socket server = new Socket(name, port);
-			sender = new Sender(new DataOutputStream(server.getOutputStream()), getLocalName());
+			sender = new Sender(new DataOutputStream(server.getOutputStream()));
 			listener = new Listener(new DataInputStream(server.getInputStream()));
 			sender.start();
 			listener.start();
@@ -43,13 +43,4 @@ public class Client {
 		}
 	}
 
-	private String getLocalName() {
-		InetAddress addr = null;
-		try {
-			addr = InetAddress.getLocalHost();
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		}
-		return addr.getHostName();
-	}
 }

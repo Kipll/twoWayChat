@@ -1,4 +1,4 @@
-package oneToOneConnection;
+package oneToOneConnectionTCP;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -16,7 +16,7 @@ public class Server extends Thread {
 		this.listener = null;
 	}
 
-	public void listen(int port) {
+	public boolean listen(int port) {
 		try {
 			ServerSocket serverSocket = new ServerSocket(port);
 
@@ -26,17 +26,21 @@ public class Server extends Thread {
 			System.out.println("Waiting for connection...");
 
 			Socket clientSocket = serverSocket.accept();
-			Sender sender = new Sender(new DataOutputStream(clientSocket.getOutputStream()), name);
+			System.out.println("connection to " + clientSocket.getLocalAddress());
+			this.sender = new Sender(new DataOutputStream(clientSocket.getOutputStream()));
 			Listener listener = new Listener(new DataInputStream(clientSocket.getInputStream()));
 			sender.start();
 			listener.start();
+			return true;
 		} catch (IOException e) {
 			e.printStackTrace();
+			return false;
 		}
 	}
 
 	public void addToQueue(byte[] input) {
 		if (input.length == 4 && sender != null) {
+			
 			sender.addToQueue(input);
 		}
 	}

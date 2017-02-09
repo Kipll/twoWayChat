@@ -2,7 +2,7 @@ package testing;
 
 import java.util.Scanner;
 
-import oneToOneConnection.*;
+import oneToOneConnectionTCP.*;
 
 public class Main {
 
@@ -18,14 +18,17 @@ public class Main {
 		if (command.equals("connect")) {
 			Client client = new Client();
 			System.out.print("port number :");
-			int port = Integer.parseInt(scanner.nextLine());
+			int port = scanner.nextInt();
+			scanner.nextLine();
 			System.out.print("host name :");
 			String host = scanner.nextLine();
 			boolean success = client.connect(port, host);
 			if (success) {
 
 				while (true) {
-					client.addToQueue(message());	
+					byte[] message = message();
+					client.addToQueue(message);	
+					System.out.println(message.length);
 				}
 					
 
@@ -34,11 +37,14 @@ public class Main {
 		} else if (command.equals("host")) {
 			Server server = new Server();
 			System.out.print("port number :");
-			int port = Integer.parseInt(scanner.nextLine());
-			server.listen(port);
-			while (true) {
-				
-				server.addToQueue(message());
+			int port = scanner.nextInt();
+			boolean success = server.listen(port);
+			System.out.println(success);
+			while (success) {
+				byte[] message = message();
+				System.out.println(message.length);
+				server.addToQueue(message);
+				System.out.println("message added");
 			}
 		}
 	}
@@ -47,9 +53,11 @@ public class Main {
 		byte[] input = new byte[4];
 		for (int i = 0; i < 4; i++) {
 			String s = scanner.nextLine();
+			System.out.println(i);
 			byte b = Byte.valueOf(s, 2);
 			input[i] = b;
 		}
+	
 		return input;
 		
 	}
