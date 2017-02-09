@@ -1,4 +1,4 @@
-package serverChat;
+package oneToOneConnection;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -6,34 +6,42 @@ import java.io.IOException;
 import java.net.*;
 import java.util.Scanner;
 
-public class MyServer {
+public class Server extends Thread {
 
-	public static void main(String[] args) {
-		Scanner scanner = new Scanner(System.in);
-		System.out.print("Input port wanted for client connection (4444 is suggested) : ");
-		int portNumber = Integer.parseInt(scanner.nextLine());
+	private Sender sender;
+	private Listener listener;
+
+	public Server() {
+		this.sender = null;
+		this.listener = null;
+	}
+
+	public void listen(int port) {
 		try {
-			ServerSocket serverSocket = new ServerSocket(portNumber);
-			String name = getName();
+			ServerSocket serverSocket = new ServerSocket(port);
+
+			String name = getLocalName();
 
 			System.out.println("To connect to this server use this name : " + name);
 			System.out.println("Waiting for connection...");
-			while (true) {
-				Socket clientSocket = serverSocket.accept();
 
-				ServerSender sender = new ServerSender(new DataOutputStream(clientSocket.getOutputStream()), name);
-				ServerListener listener = new ServerListener(new DataInputStream(clientSocket.getInputStream()));
-				sender.start();
-				listener.start();
-
-			}
+			Socket clientSocket = serverSocket.accept();
+			Sender sender = new Sender(new DataOutputStream(clientSocket.getOutputStream()), name);
+			Listener listener = new Listener(new DataInputStream(clientSocket.getInputStream()));
+			sender.start();
+			listener.start();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
 	}
 
-	private static String getName() {
+	public void addToQueue(byte[] input) {
+		if (input.length == 4 && sender != null) {
+			sender.addToQueue(input);
+		}
+	}
+
+	private String getLocalName() {
 		InetAddress addr = null;
 		try {
 			addr = InetAddress.getLocalHost();

@@ -1,4 +1,4 @@
-package serverChat;
+package oneToOneConnection;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -8,25 +8,28 @@ import java.util.Scanner;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-public class ServerSender extends Thread {
+import sun.security.util.Length;
+
+public class Sender extends Thread {
 	private DataOutputStream out;
-	private BlockingQueue<String> queue;
+	private BlockingQueue<byte[]> queue;
 	private Scanner scanner;
 
-	public ServerSender(DataOutputStream out, String serverName) {
+	public Sender(DataOutputStream out, String serverName) {
 
 		this.out = out;
-		this.queue = new LinkedBlockingQueue<String>();
+		this.queue = new LinkedBlockingQueue<byte[]>();
 		this.scanner = new Scanner(System.in);
 
 	}
-
 	public void run() {
+		
 		try {
-			out.writeUTF("you have connected to server: " + getServerName());
+			byte[] connectSignal = new byte[] {00000000,00000000,00000000,00000000};
+			out.write(connectSignal);
 			while (true) {
-				addToQueue(scanner.nextLine());
-				out.writeUTF(queue.take());
+				//addToQueue(scanner.nextLine());
+				out.write(queue.take());
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -37,8 +40,11 @@ public class ServerSender extends Thread {
 		}
 	}
 
-	public void addToQueue(String input) {
+	public void addToQueue(byte[] input) {
+		if(input.length == 4)
+		{
 		queue.add(input);
+		}
 	}
 
 	private String getServerName() {

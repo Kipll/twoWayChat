@@ -1,23 +1,23 @@
-package serverChat;
+package oneToOneConnection;
 
 import java.io.DataInputStream;
 import java.io.IOException;
 
-public class ServerListener extends Thread {
+public class Listener extends Thread {
 
 	private DataInputStream in;
 
-	public ServerListener(DataInputStream in) {
+	public Listener(DataInputStream in) {
 		this.in = in;
 	}
 
 	public void run() {
 		try {
 			while (true) {
-				System.out.println(in.readUTF());
+				System.out.println(in.read());
 			}
 		} catch (IOException e) {
-			System.out.println("Connection to client was lost");
+			System.out.println("Connection was lost");
 
 		}
 	}
