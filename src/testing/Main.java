@@ -24,8 +24,12 @@ public class Main {
 			if (success) {
 
 				while (true) {
-					byte[] input = new byte[] { scanner.nextByte(2), scanner.nextByte(2), scanner.nextByte(2),
-							scanner.nextByte(2) };
+					byte[] input = new byte[4];
+					for(int i = 0; i < 4; i++) {
+						String s = scanner.nextLine();
+						byte b = Byte.valueOf(s, 2);
+						input[i] = b;
+					}
 					client.addToQueue(input);
 				}
 
@@ -36,8 +40,12 @@ public class Main {
 			int port = Integer.parseInt(scanner.nextLine());
 			server.listen(port);
 			while (true) {
-				byte[] input = new byte[] { scanner.nextByte(2), scanner.nextByte(2), scanner.nextByte(2),
-						scanner.nextByte(2) };
+				byte[] input = new byte[4];
+				for(int i = 0; i < 4; i++) {
+					String s = scanner.nextLine();
+					byte b = Byte.valueOf(s, 2);
+					input[i] = b;
+				}
 				server.addToQueue(input);
 			}
 		}

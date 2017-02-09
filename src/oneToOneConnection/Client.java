@@ -32,6 +32,7 @@ public class Client {
 			return true;
 		} catch (IOException e) {
 			System.out.println("couldnt connect to specified host, connection refused.");
+			e.printStackTrace();
 			return false;
 		}
 	}
