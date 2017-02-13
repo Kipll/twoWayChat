@@ -1,8 +1,6 @@
-package testing;
+package oneToOneConnection.tcpBytes;
 
 import java.util.Scanner;
-
-import oneToOneConnectionTCP.*;
 
 public class Main {
 
