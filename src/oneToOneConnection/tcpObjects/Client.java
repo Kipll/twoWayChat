@@ -1,13 +1,15 @@
-package oneToOneConnectionTCP;
+package oneToOneConnection.tcpObjects;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-import oneToOneConnectionTCP.*;
+import oneToOneConnection.*;
 
 public class Client {
 
@@ -25,8 +27,8 @@ public class Client {
 		try {
 
 			Socket server = new Socket(name, port);
-			sender = new Sender(new DataOutputStream(server.getOutputStream()));
-			listener = new Listener(new DataInputStream(server.getInputStream()));
+			sender = new Sender(new ObjectOutputStream(server.getOutputStream()));
+			listener = new Listener(new ObjectInputStream(server.getInputStream()));
 			sender.start();
 			listener.start();
 			return true;
@@ -37,9 +39,9 @@ public class Client {
 		}
 	}
 
-	public void addToQueue(byte[] input) {
-		if (input.length == 4 && sender != null) {
-			sender.addToQueue(input);
+	public void addToQueue(Message message) {
+		if (sender != null) {
+			sender.addToQueue(message);
 		}
 	}
 

@@ -1,4 +1,4 @@
-package oneToOneConnectionTCP;
+package oneToOneConnection.tcpStrings;
 
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -14,7 +14,7 @@ public class Listener extends Thread {
 	public void run() {
 		try {
 			while (true) {
-				System.out.println(in.read());
+				System.out.println(in.readUTF());
 			}
 		} catch (IOException e) {
 			System.out.println(e + " : Connection was lost");

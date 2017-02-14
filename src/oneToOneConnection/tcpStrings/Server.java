@@ -1,4 +1,4 @@
-package oneToOneConnectionTCP;
+package oneToOneConnection.tcpStrings;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -38,10 +38,10 @@ public class Server extends Thread {
 		}
 	}
 
-	public void addToQueue(byte[] input) {
-		if (input.length == 4 && sender != null) {
+	public void addToQueue(String message) {
+		if (sender != null) {
 			
-			sender.addToQueue(input);
+			sender.addToQueue(message);
 		}
 	}
 

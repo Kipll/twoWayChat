@@ -1,4 +1,4 @@
-package oneToOneConnection.tcpBytes;
+package oneToOneConnection.tcpStrings;
 
 import java.util.Scanner;
 
@@ -24,9 +24,9 @@ public class Main {
 			if (success) {
 
 				while (true) {
-					byte[] message = message();
+					String message = scanner.nextLine();
 					client.addToQueue(message);
-					System.out.println(message.length);
+					
 				}
 
 			}
@@ -37,23 +37,13 @@ public class Main {
 			boolean success = server.listen(port);
 			System.out.println(success);
 			while (success) {
-				byte[] message = message();
+				String message = scanner.nextLine();
 				server.addToQueue(message);
 			}
 		}
 	}
 
-	private byte[] message() {
-		byte[] input = new byte[4];
-		for (int i = 0; i < 4; i++) {
-			String s = scanner.nextLine();
-			byte b = Byte.valueOf(s, 2);
-			input[i] = b;
-		}
-
-		return input;
-
-	}
+	
 
 	public static void main(String[] args) {
 		Main main = new Main();

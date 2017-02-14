@@ -1,4 +1,4 @@
-package oneToOneConnectionTCP;
+package oneToOneConnection.tcpStrings;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -7,18 +7,18 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 public class Sender extends Thread {
 	private DataOutputStream out;
-	private BlockingQueue<byte[]> queue;
+	private BlockingQueue<String> queue;
 
 	public Sender(DataOutputStream out) {
 		this.out = out;
-		this.queue = new LinkedBlockingQueue<byte[]>();
+		this.queue = new LinkedBlockingQueue<String>();
 	}
 
 	public void run() {
 
 		try {
 			while (true) {
-				out.write(queue.take());
+				out.writeUTF(queue.take());
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -28,9 +28,9 @@ public class Sender extends Thread {
 		}
 	}
 
-	public void addToQueue(byte[] input) {
-		if (input.length == 4) {
-			queue.add(input);
-		}
+	public void addToQueue(String message) {
+
+		queue.add(message);
+
 	}
 }
