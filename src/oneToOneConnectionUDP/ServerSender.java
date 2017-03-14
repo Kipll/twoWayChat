@@ -1,5 +1,5 @@
 package oneToOneConnectionUDP;
 
-public class UDPServer {
+public class ServerSender {
 
 }

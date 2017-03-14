@@ -3,36 +3,48 @@ package oneToOneConnectionUDP;
 import java.io.*;
 import java.net.*;
 
+
+
+/**
+ * 
+ * @author Sam Dowell
+ *
+ */
 public class UDPClient {
 
-	public UDPClient(String name, String port) {
+	private Sender sender; // the sender thread for the client
+	private ClientListener listener; // the listener thread for the client
+	private DatagramSocket socket; // the socket connection for the client
+	private ClientWindow window; // the window displayed to the client
 
+	/**
+	 * constructor for client only initialises the instance variables for the
+	 * class
+	 */
+	public UDPClient() {
+		this.sender = null;
+		this.listener = null;
+		this.socket = null;
+		this.window = null;
 	}
 
-	public static void main(String args[]) throws Exception {
-		BufferedReader inFromUser = new BufferedReader(new InputStreamReader(System.in));
-		DatagramSocket clientSocket = new DatagramSocket();
-		InetAddress IPAddress = InetAddress.getByName("localhost");
-		byte[] sendData = new byte[3];
-		byte[] receiveData = new byte[3];
-		String sentence = inFromUser.readLine();
-		sendData = sentence.getBytes();
-		for (int i = 0; i < sendData.length; i++) {
-
-			System.out.println(Byte.toUnsignedInt(sendData[i]));
-		}
-		DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, 9876);
-		clientSocket.send(sendPacket);
-		DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
-		clientSocket.receive(receivePacket);
-		byte[] data = new byte[3];
-		data = receivePacket.getData();
-		for (int i = 0; i < data.length; i++) {
-
-			System.out.println(Byte.toUnsignedInt(data[i]));
-		}
-		// System.out.println("FROM SERVER:" + modifiedSentence);
-		System.out.println(receivePacket.getLength());
-		clientSocket.close();
+	/**
+	 * 
+	 * @param name :the name of the server you wish to connect to
+	 * @param port :the port number you wish to connect to
+	 * @return true if a connection is successfully established. false otherwise;
+	 */
+	public boolean connect(String name, int port){
+		InetAddress address = InetAddress.getByName(name);
+		this.socket = new DatagramSocket(port, address);
+		sender = new Sender(socket);
+		window = new ClientWindow(sender);
+		listener = new ClientListener(window);
+		window.cl = listener;
+		sender.start();
+		listener.start();
+		return true;
 	}
+
+	
 }
